@@ -1,16 +1,16 @@
 package com.tomtre.shoppinglist.android.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.tomtre.shoppinglist.android.vo.Product
 
 @Dao
 interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(product: Product)
+
+    @Update
+    fun update(product: Product)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProducts(products: List<Product>)

@@ -10,7 +10,7 @@ import retrofit2.Response
 @Suppress("unused") // T is used in extending classes
 sealed class ApiResponse<T> {
     companion object {
-        fun <T> create(error: Throwable): ApiErrorResponse<T> {
+        fun <T> create(error: Throwable): ApiResponse<T> {
             return ApiErrorResponse(error.message ?: "unknown error")
         }
 
