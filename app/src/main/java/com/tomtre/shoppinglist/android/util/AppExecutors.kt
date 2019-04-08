@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 
 @AppScope
-class AppExecutors(
+open class AppExecutors(
     private val diskIO: Executor,
     private val networkIO: Executor,
     private val mainThread: Executor

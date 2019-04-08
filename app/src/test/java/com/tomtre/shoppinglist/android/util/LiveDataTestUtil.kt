@@ -1,4 +1,4 @@
-package com.tomtre.shoppinglist.android
+package com.tomtre.shoppinglist.android.util
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer

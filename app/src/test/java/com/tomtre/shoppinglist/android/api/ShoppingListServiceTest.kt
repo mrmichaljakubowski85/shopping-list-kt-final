@@ -1,11 +1,15 @@
 package com.tomtre.shoppinglist.android.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.tomtre.shoppinglist.android.LiveDataTestUtil.getValue
+import com.tomtre.shoppinglist.android.util.LiveDataTestUtil.getValue
 import com.tomtre.shoppinglist.android.util.LiveDataCallAdapterFactory
+import com.tomtre.shoppinglist.android.vo.Product
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -42,10 +46,30 @@ class ShoppingListServiceTest {
     }
 
     @Test
-    fun `When xxxx`() {
+    fun `When call getProduct Then request correct path`() {
+        //given
         enqueueResponse("single-product-response.json")
+
+        //when
+        service.getProduct(1L)
+
+        //then
+        val request = mockWebServer.takeRequest()
+        assertThat(request.path, `is`("products/1"))
+    }
+
+    @Test
+    fun `When call getProduct Then body response holds correct Product`() {
+        //given
+        enqueueResponse("single-product-response.json")
+
+        //when
         val apiSuccessResponse = getValue(service.getProduct(1L)) as ApiSuccessResponse
-        val bodyResponse = apiSuccessResponse.body
+
+        //then
+        val productResponse = apiSuccessResponse.body
+        assertThat<Product>(productResponse, notNullValue())
+        assertThat(productResponse.title, `is`("product title"))
 
     }
 
@@ -53,7 +77,7 @@ class ShoppingListServiceTest {
 //      val inputStream = javaClass.classLoader.getResourceAsStream("api-response/$fileName")
         val inputStream = checkNotNull(
             this.javaClass::class.java.getResourceAsStream("api-response/$fileName")
-        ) { "File doesn't exist." }
+        ) { "File $fileName doesn't exist." }
         val source = Okio.buffer(Okio.source(inputStream))
         val mockResponse = MockResponse()
         for ((key, value) in headers) {
